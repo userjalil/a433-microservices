@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  item-db:
+    container_name: item-db
+    image: mongo:3
+    ports:
+      - "27017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - app-db:/data/db
+    networks:
+      app-net:
+        ipv4_address: 172.25.0.2
+
+  item-app:
+    container_name: item-app
+    image: ghcr.io/userjalil/item-app:v1
+    restart: always
+    depends_on:
+      - item-db
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      DB_HOST: item-db
+    networks:
+      app-net:
+        ipv4_address: 172.25.0.3
+
+volumes:
+  app-db:
+
+
+networks:
+  app-net:
+    name: app-net
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/24
