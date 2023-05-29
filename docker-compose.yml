@@ -21,9 +21,6 @@ services:
       - item-db
     ports:
       - "80:8080"
-    environment:
-      NODE_ENV: production
-      DB_HOST: item-db
     networks:
       app-net:
         ipv4_address: 172.25.0.3
