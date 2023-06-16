@@ -20,4 +20,4 @@ spec:
         - containerPort: 8080
         env:
         - name: VUE_APP_BACKEND
-          value: "http://127.0.0.1:44861/" # hasil dari "minikube service karsajobs"
+          value: "http://127.0.0.1:8080/"
