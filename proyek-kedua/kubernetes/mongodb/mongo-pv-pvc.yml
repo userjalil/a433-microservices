@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: manual
   hostPath:
-    path: /path/to/host/persistent/volume
+    path: /data/db
 
 ---
 apiVersion: v1
