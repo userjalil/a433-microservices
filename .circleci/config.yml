@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/alpine:3.14
+      - image: circleci/docker:20.10.11
 
     steps:
       - checkout
