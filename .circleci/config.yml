@@ -22,6 +22,11 @@ jobs:
       #     command: go test -v -short --count=1 $(go list ./...)
 
       - run:
+          name: Install Docker CLI
+          command: |
+            apk add --no-cache docker
+
+      - run:
           name: Build and Push Image
           command: |
             export nama_image="ghcr.io/userjalil/karsajobs:latest"
