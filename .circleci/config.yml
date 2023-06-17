@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  dicoding:
+  build:
     docker:
       - image: alpine:3.14
 
