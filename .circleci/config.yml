@@ -32,6 +32,6 @@ jobs:
             export nama_image="ghcr.io/userjalil/karsajobs:latest"
             export user_git="userjalil"
             export pass_git="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"            
-            echo "$pass_git" | docker login ghcr.io -u "$user_git" --password-stdin
+            docker login ghcr.io -u $user_git -p $pass_git
             docker build -t $nama_image .
             docker push $nama_image
