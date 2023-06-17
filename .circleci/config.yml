@@ -29,6 +29,6 @@ jobs:
       - run:
           name: Build and Push Image
           command: | 
-            echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
-            docker build -t ghcr.io/userjalil/karsajobs:latest .
-            docker push ghcr.io/userjalil/karsajobs:latest
+            echo "$DOCKER_PASS" | docker login -u userjalil --password-stdin
+            docker build -t userjalil/karsajobs:latest .
+            docker push userjalil/karsajobs:latest
