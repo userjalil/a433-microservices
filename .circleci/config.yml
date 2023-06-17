@@ -28,10 +28,7 @@ jobs:
 
       - run:
           name: Build and Push Image
-          command: |
-            export nama_image="ghcr.io/userjalil/karsajobs:latest"
-            export user_git="userjalil"
-            export pass_git="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"            
-            docker login ghcr.io -u $user_git -p $pass_git
-            docker build -t $nama_image .
-            docker push $nama_image
+          command: |        
+            docker login ghcr.io -u userjalil -p $GIT_PASS
+            docker build -t ghcr.io/userjalil/karsajobs:latest .
+            docker push ghcr.io/userjalil/karsajobs:latest
