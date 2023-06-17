@@ -1,10 +1,14 @@
 version: 2.1
+executors:
+  docker-executor:
+    docker:
+      - image: circleci/golang:1.15
+    environment:
+      DOCKER_HOST: tcp://docker:2375
+
 jobs:
   build:
-    docker:
-      - image: golang:1.15-alpine
-    services:
-      - docker 
+    executor: docker-executor
 
     steps:
       - checkout
@@ -19,14 +23,9 @@ jobs:
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
 
-      # - run:
-      #     name: Run Unit Tests
-      #     command: go test -v -short --count=1 $(go list ./...)
-
-      # - run:
-      #     name: Install Docker CLI
-      #     command: |
-      #       apk add --no-cache docker
+      - run:
+          name: Run Unit Tests
+          command: go test -v -short --count=1 $(go list ./...)
 
       - run:
           name: Build and Push Image
