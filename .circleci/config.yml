@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/docker:20.10.11
+      - image: circleci/alpine:3.14
 
     steps:
       - checkout
@@ -25,7 +25,6 @@ jobs:
             export nama_image="ghcr.io/userjalil/karsajobs:latest"
             export user_git="userjalil"
             export pass_git="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"
-            
             echo "$pass_git" | docker login ghcr.io -u "$user_git" --password-stdin
             docker build -t $nama_image .
             docker push $nama_image
