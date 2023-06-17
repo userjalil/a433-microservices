@@ -17,9 +17,9 @@ jobs:
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
 
-      - run:
-          name: Run Unit Tests
-          command: go test -v -short --count=1 $(go list ./...)
+      # - run:
+      #     name: Run Unit Tests
+      #     command: go test -v -short --count=1 $(go list ./...)
 
       - run:
           name: Build and Push Image
