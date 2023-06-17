@@ -1,32 +1,26 @@
 version: 2.1
 jobs:
-  build:
+  dicoding:
     docker:
-      - image: circleci/alpine:3.14
-        auth:
-          username: userjalil
-          password: $DOCKER_PASS
+      - image: alpine:3.14
 
     steps:
       - checkout
 
       - run:
+          name: Install hadolint
+          command: apk add --no-cache curl && \
+                   curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
+                   chmod +x /usr/local/bin/hadolint
+
+      - run:
           name: Lint Dockerfile
-          command: |
-            apk add --no-cache curl
-            curl -sL -o /tmp/hadolint "https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64"
-            chmod +x /tmp/hadolint
-            /tmp/hadolint Dockerfile
+          command: hadolint Dockerfile
 
       - run:
-          name: Run Unit Tests
+          name: Install Go
+          command: apk add --no-cache go
+
+      - run:
+          name: Run Unit Test
           command: go test -v -short --count=1 $(go list ./...)
-
-      - run:
-          name: Build and Push Image
-          command: |
-            export nama_image="ghcr.io/userjalil/karsajobs:latest"
-            export user_git="userjalil"
-            echo "$GIT_PASS" | docker login ghcr.io -u "$user_git" --password-stdin
-            docker build -t $nama_image .
-            docker push $nama_image
