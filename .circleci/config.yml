@@ -25,6 +25,11 @@ jobs:
       - checkout
 
       - run:
+          name: Install cgo dependencies
+          command: |
+            apk add --no-cache gcc libc-dev
+
+      - run:
           name: Run Unit Tests
           command: go test -v -short --count=1 $(go list ./...)
 
@@ -37,10 +42,6 @@ jobs:
           version: 20.10.14
 
       - checkout
-
-      - run:
-          name: Install cgo dependencies
-          command: apk add --no-cache gcc musl-dev
 
       - run:
           name: Build dan Push Image
