@@ -16,10 +16,17 @@ jobs:
           command: |
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
+ 
+  test:
+    docker:
+      - image: golang:1.15-alpine
 
-      # - run:
-      #     name: Run Unit Tests
-      #     command: go test -v -short --count=1 $(go list ./...)
+    steps:
+      - checkout
+
+      - run:
+          name: Run Unit Tests
+          command: go test -v -short --count=1 $(go list ./...)
 
   push:
     docker:
@@ -29,14 +36,6 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
       - checkout
-
-      # - run:
-      #     name: Install Docker CLI
-      #     command: |
-      #       apk add --no-cache docker
-      #       apk add --no-cache openrc
-      #       addgroup $USER docker
-      #       rc-service docker start
 
       - run:
           name: Build dan Push Image
@@ -50,6 +49,9 @@ workflows:
   build_push_image:
     jobs:
       - build
-      - push:
+      - test:
           requires:
             - build
+      - push:
+          requires:
+            - test
