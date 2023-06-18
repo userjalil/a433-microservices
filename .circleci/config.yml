@@ -31,8 +31,9 @@ jobs:
       - run:
           name: Install Docker CLI
           command: |
-            apk add docker
-            service docker start
+            apk add --no-cache docker
+            apk add --no-cache openrc
+            rc-service docker start
 
       - run:
           name: Build dan Push Image
@@ -43,7 +44,7 @@ jobs:
 
 
 workflows:
-  build_test:
+  build_push_image:
     jobs:
       - build
       - push:
