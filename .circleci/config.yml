@@ -23,9 +23,11 @@ jobs:
 
   push:
     docker:
-      - image: docker:20.10.7
+      - image: cimg/base:stable
 
     steps:
+      - setup_remote_docker:
+          version: 20.10.14
       - checkout
 
       # - run:
@@ -40,7 +42,7 @@ jobs:
           name: Build dan Push Image
           command: |
             echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin 
-            docker build -t ghcr.io/userjalil/karsajobs:latest . 
+            docker buildx build -t ghcr.io/userjalil/karsajobs:latest . 
             docker push ghcr.io/userjalil/karsajobs:latest
 
 
