@@ -23,7 +23,7 @@ jobs:
 
   push:
     docker:
-      - image: docker:20:10:17
+      - image: docker:20:10:7
 
     steps:
       - checkout
