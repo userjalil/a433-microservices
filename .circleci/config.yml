@@ -21,13 +21,20 @@ jobs:
       #     name: Run Unit Tests
       #     command: go test -v -short --count=1 $(go list ./...)
 
-      - run:
-          name: Install Docker CLI
-          command: |
-            apk add --no-cache docker
-            rc-update add docker boot
-            service docker start
+      # - run:
+      #     name: Install Docker CLI
+      #     command: |
+      #       apk add --no-cache docker
+      #       rc-update add docker boot
+      #       service docker start
 
+  test:
+    machine:
+      image: alpinelinux/docker-cli
+
+    steps:
+      - checkout
+      
       - run:
           name: Build and Push Image
           command: |
