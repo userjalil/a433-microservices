@@ -16,18 +16,6 @@ jobs:
           command: |
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
-
-      # - run:
-      #     name: Run Unit Tests
-      #     command: go test -v -short --count=1 $(go list ./...)
-
-      # - run:
-      #     name: Install Docker CLI
-      #     command: |
-      #       apk add --no-cache docker
-      #       rc-update add docker boot
-      #       service docker start
-
   test:
     docker:
       - image: alpinelinux/docker-cli
