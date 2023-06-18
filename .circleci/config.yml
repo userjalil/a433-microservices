@@ -23,18 +23,18 @@ jobs:
 
   push:
     docker:
-      - image: alpine:3.14
+      - image: docker:20:10:17
 
     steps:
       - checkout
 
-      - run:
-          name: Install Docker CLI
-          command: |
-            apk add --no-cache docker
-            apk add --no-cache openrc
-            addgroup $USER docker
-          #  rc-service docker start
+      # - run:
+      #     name: Install Docker CLI
+      #     command: |
+      #       apk add --no-cache docker
+      #       apk add --no-cache openrc
+      #       addgroup $USER docker
+      #       rc-service docker start
 
       - run:
           name: Build dan Push Image
