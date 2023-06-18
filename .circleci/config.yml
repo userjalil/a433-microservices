@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  lint-dockerfile:
     docker:
       - image: golang:1.15-alpine
 
@@ -16,8 +16,8 @@ jobs:
           command: |
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
- 
-  test:
+
+  test-app:
     docker:
       - image: golang:1.15-alpine
 
@@ -33,7 +33,7 @@ jobs:
           name: Run Unit Tests
           command: go test -v -short --count=1 $(go list ./...)
 
-  push:
+  build-app-karsajobs:
     docker:
       - image: cimg/base:stable
 
@@ -52,12 +52,12 @@ jobs:
 
 
 workflows:
-  build_push_image:
+  karsajobs:
     jobs:
-      - build
-      - test:
+      - lint-dockerfile
+      - test-app:
           requires:
-            - build
-      - push:
+            - lint-dockerfile
+      - build-app-karsajobs:
           requires:
-            - test
+            - test-app
