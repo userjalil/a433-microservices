@@ -36,7 +36,7 @@ jobs:
 
 
 workflows:
-  build_push_image:
+  karsajobs-ui:
     jobs:
       - lint-dockerfile
       - build-app-karsajobs-ui:
