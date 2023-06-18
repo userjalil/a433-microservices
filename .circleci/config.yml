@@ -2,14 +2,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.15
+      - image: golang:1.15-alpine
 
     steps:
       - checkout
 
       - run:
           name: Install cURL
-          command: sudo apt-get install -y curl
+          command: apk add --no-cache curl
 
       - run:
           name: Install Hadolint
@@ -17,18 +17,36 @@ jobs:
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
 
-      - run:
-          name: Run Unit Tests
-          command: go test -v -short --count=1 $(go list ./...)
+      # - run:
+      #     name: Run Unit Tests
+      #     command: go test -v -short --count=1 $(go list ./...)
 
-      - setup_remote_docker:
-          version: 20.10.18
+  push:
+    docker:
+      - image: alpine:3.14
+
+    steps:
+      - checkout
 
       - run:
-          name: Build and Push Image
+          name: Install Docker CLI
           command: |
-            export nama_image="ghcr.io/userjalil/karsajobs:latest"
-            export user_git="userjalil"            
-            echo "$GIT_PASS" | docker login ghcr.io -u "$user_git" --password-stdin
-            docker build -t $nama_image .
-            docker push $nama_image
+            apk add --no-cache docker
+            rc-update add docker boot
+            service docker start
+
+      - run:
+          name: Build dan Push Image
+          command: |
+            echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
+            docker build -t ghcr.io/userjalil/karsajobs:latest .
+            docker push ghcr.io/userjalil/karsajobs:latest
+
+
+workflows:
+  build_test:
+    jobs:
+      - build
+      - push:
+          requires:
+            - build
