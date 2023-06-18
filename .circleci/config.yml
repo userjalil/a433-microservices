@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: golang:1.15-alpine
+    services:
+      - docker
 
     steps:
       - checkout
