@@ -3,8 +3,6 @@ jobs:
   build:
     docker:
       - image: golang:1.15-alpine
-    services:
-      - docker
 
     steps:
       - checkout
@@ -32,5 +30,6 @@ jobs:
           name: Build and Push Image
           command: |
             echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
+            service docker start
             docker build -t ghcr.io/userjalil/karsajobs:latest .
             docker push ghcr.io/userjalil/karsajobs:latest
