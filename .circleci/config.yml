@@ -31,8 +31,7 @@ jobs:
       - run:
           name: Install Docker CLI
           command: |
-            apk add --no-cache docker
-            rc-update add docker boot
+            apk add docker
             service docker start
 
       - run:
