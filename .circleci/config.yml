@@ -33,14 +33,15 @@ jobs:
           command: |
             apk add --no-cache docker
             apk add --no-cache openrc
+            addgroup $USER docker
           #  rc-service docker start
 
       - run:
           name: Build dan Push Image
           command: |
             echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin 
-            RUN docker build -t ghcr.io/userjalil/karsajobs:latest . 
-            RUN docker push ghcr.io/userjalil/karsajobs:latest
+            docker build -t ghcr.io/userjalil/karsajobs:latest . 
+            docker push ghcr.io/userjalil/karsajobs:latest
 
 
 workflows:
