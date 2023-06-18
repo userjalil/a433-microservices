@@ -35,7 +35,12 @@ jobs:
     steps:
       - setup_remote_docker:
           version: 20.10.14
+
       - checkout
+
+      - run:
+          name: Install cgo dependencies
+          command: apk add --no-cache gcc musl-dev
 
       - run:
           name: Build dan Push Image
