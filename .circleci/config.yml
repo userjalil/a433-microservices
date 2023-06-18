@@ -1,0 +1,34 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: golang:1.15-alpine
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install cURL
+          command: apk add --no-cache curl
+
+      - run:
+          name: Install Hadolint
+          command: |
+            curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
+            chmod +x /usr/local/bin/hadolint
+
+      # - run:
+      #     name: Run Unit Tests
+      #     command: go test -v -short --count=1 $(go list ./...)
+
+      - run:
+          name: Install Docker CLI
+          command: |
+            apk add --no-cache docker
+
+      - run:
+          name: Build and Push Image
+          command: |
+            echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
+            docker build -t ghcr.io/userjalil/karsajobs:latest .
+            docker push ghcr.io/userjalil/karsajobs:latest
