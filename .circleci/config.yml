@@ -1,0 +1,44 @@
+version: 2.1
+jobs:
+  hadolint:
+    docker:
+      - image: golang:1.15-alpine
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install cURL
+          command: apk add --no-cache curl
+
+      - run:
+          name: Install Hadolint
+          command: |
+            curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
+            chmod +x /usr/local/bin/hadolint
+ 
+  push:
+    docker:
+      - image: cimg/base:stable
+
+    steps:
+      - setup_remote_docker:
+          version: 20.10.14
+
+      - checkout
+
+      - run:
+          name: Build dan Push Image
+          command: |
+            echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin 
+            docker buildx build -t ghcr.io/userjalil/karsajobs-ui:latest . 
+            docker push ghcr.io/userjalil/karsajobs-ui:latest
+
+
+workflows:
+  build_push_image:
+    jobs:
+      - hadolint
+      - push:
+          requires:
+            - hadolint
