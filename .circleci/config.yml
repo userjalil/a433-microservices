@@ -25,11 +25,12 @@ jobs:
           name: Install Docker CLI
           command: |
             apk add --no-cache docker
+            rc-update add docker boot
+            service docker start
 
       - run:
           name: Build and Push Image
           command: |
             echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
-            service docker start
             docker build -t ghcr.io/userjalil/karsajobs:latest .
             docker push ghcr.io/userjalil/karsajobs:latest
