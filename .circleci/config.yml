@@ -16,6 +16,11 @@ jobs:
           command: |
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
+
+      # - run:
+      #     name: Run Unit Tests
+      #     command: go test -v -short --count=1 $(go list ./...)
+
   test:
     docker:
       - image: alpinelinux/docker-cli
@@ -29,3 +34,10 @@ jobs:
             echo "$GIT_PASS" | docker login ghcr.io -u userjalil --password-stdin
             docker build -t ghcr.io/userjalil/karsajobs:latest .
             docker push ghcr.io/userjalil/karsajobs:latest
+
+
+workflows:
+  build_test:
+    jobs:
+      - build
+      - test
