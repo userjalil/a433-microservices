@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  hadolint:
+  lint-dockerfile:
     docker:
       - image: golang:1.15-alpine
 
@@ -16,8 +16,8 @@ jobs:
           command: |
             curl -sL -o /usr/local/bin/hadolint "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64" && \
             chmod +x /usr/local/bin/hadolint
- 
-  push:
+
+  build-app-karsajobs-ui:
     docker:
       - image: cimg/base:stable
 
@@ -38,7 +38,7 @@ jobs:
 workflows:
   build_push_image:
     jobs:
-      - hadolint
-      - push:
+      - lint-dockerfile
+      - build-app-karsajobs-ui:
           requires:
-            - hadolint
+            - lint-dockerfile
