@@ -29,8 +29,8 @@ jobs:
       #       service docker start
 
   test:
-    machine:
-      image: alpinelinux/docker-cli
+    docker:
+      - image: alpinelinux/docker-cli
 
     steps:
       - checkout
