@@ -55,6 +55,8 @@ metadata:
 spec:
   hosts:
   - rabbitmq-service
+  gateways:
+  - ecommerce-gateway
   http:
   - match:
     - uri: /
