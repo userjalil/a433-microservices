@@ -1,0 +1,9 @@
+Github Repository
+=================
+https://github.com/userjalil/a433-microservices.git
+
+
+Images
+======
+docker pull ghcr.io/userjalil/shipping-app:latest
+docker pull ghcr.io/userjalil/order-app:latest
