@@ -1,0 +1,42 @@
+# order app service
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  labels:
+    app: orderpage
+spec:
+  selector:
+    app: orderpage
+  ports:
+  - port: 3000
+    name: http
+---
+
+# order app deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderpage-dev
+  labels:
+    app: orderpage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderpage
+  template:
+    metadata:
+      labels:
+        app: orderpage
+    spec:
+      containers:
+      - name: orderpage
+        image: ghcr.io/userjalil/order-app:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          value: "3000"
+        - name: AMQP_URL
+          value: "amqp://jalil:dicoding@rabbitmq-service.default.svc.cluster.local:5672"  

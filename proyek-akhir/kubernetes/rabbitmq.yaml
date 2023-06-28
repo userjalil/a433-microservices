@@ -1,0 +1,73 @@
+# RabbitMQ service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+  labels:
+    app: rabbitmq
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+  - name: tcp-amqp
+    port: 5672
+    targetPort: 5672
+  - name: tcp-management
+    port: 15672
+    targetPort: 15672  
+---
+
+# RabbitMQ statefulset
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq-statefulset
+  labels:
+    app: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  serviceName: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3.11-management
+        ports:
+        - containerPort: 5672
+          name: tcp-amqp
+        - containerPort: 15672
+          name: tcp-management
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
+        - name: rabbitmq-log
+          mountPath: /var/log/rabbitmq
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: jalil
+        - name: RABBITMQ_DEFAULT_PASS
+          value: dicoding
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: rabbitmq-log
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+         
