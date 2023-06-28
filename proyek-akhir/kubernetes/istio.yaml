@@ -1,0 +1,69 @@
+# gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ecommerce-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+# order-service VirtualService
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: order-service-vs
+spec:
+  hosts:
+  - order-service
+  gateways:
+  - ecommerce-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /order
+    route:
+    - destination:
+        host: order-service
+        port:
+          number: 3000
+      weight: 100
+---
+# order-service DestinationRule
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: order-service-dr
+spec:
+  host: order-service
+  subsets:
+  - name: order-service
+    labels:
+      app: orderpage
+---      
+# rabbitmq-service VirtualService
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rabbitmq-service-vs
+spec:
+  hosts:
+  - rabbitmq-service
+  http:
+  - route:
+    - destination:
+        host: rabbitmq-service
+        port:
+          number: 5672
+      weight: 100
+    - destination:
+        host: rabbitmq-service
+        port:
+          number: 15672
+      weight: 100
