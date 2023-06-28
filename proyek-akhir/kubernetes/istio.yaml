@@ -56,7 +56,9 @@ spec:
   hosts:
   - rabbitmq-service
   http:
-  - route:
+  - match:
+    - uri: /
+    route:
     - destination:
         host: rabbitmq-service
         port:
